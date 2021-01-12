@@ -8,7 +8,8 @@ const app = Vue.createApp({
             playerHealth : 100,
             monsterHealth : 100,
             currentRound : 0,
-            winner : null
+            winner : null,
+            logMessages : []
         };
     },
     computed : {
@@ -33,22 +34,19 @@ const app = Vue.createApp({
             this.currentRound++;
             const attackValue = getRndValue(5, 12);// Math.floor(Math.random() * (12 - 5) + 5);
             this.monsterHealth -= attackValue;
-
+            this.addLOgMessage('player', 'attack', attackValue);
             this.attackPlayer();
-
-            if (this.playerHealth < 0) {
-                // Player lost
-
-            }
         },
         attackPlayer(){
             const attackValue = getRndValue(8, 15);//Math.floor(Math.random() * (15 - 8) + 8);
             this.playerHealth -= attackValue;
+            this.addLOgMessage('monster', 'attack', attackValue);
         },
         specialAttackMonster(){
             this.currentRound++;
             const attackValue = getRndValue(10, 25);
             this.monsterHealth -= attackValue;
+            this.addLOgMessage('player', 'attack', attackValue);
             this.attackPlayer();
         },
         healPlayer(){
@@ -59,7 +57,7 @@ const app = Vue.createApp({
             }else{
                 this.playerHealth += healValue;
             }
-
+            this.addLOgMessage('player', 'heal', healValue);
             this.attackPlayer();
         },
         startGame(){
@@ -67,9 +65,18 @@ const app = Vue.createApp({
             this.monsterHealth = 100;
             this.winner = null;
             this.currentRound = 0;
+            this.logMessages = [];
         },
         surrender(){
             this.winner = 'monster';
+        },
+        addLOgMessage(who,what, value){
+            this.logMessages.unshift({
+                actionBy: who,
+                actionType : what,
+                actionValue : value,
+                actionTime : new Date().toLocaleDateString()
+            })
         }
     },
     watch : {
