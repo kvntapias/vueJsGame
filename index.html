@@ -33,9 +33,10 @@
         </div>
       </section>
 
-      <section class="container">
-        <h2>GAME OVER!</h2>
-        <h3>YOU LOST!</h3>
+      <section class="container" v-if="winner">
+        <h2 v-if="winner === 'monster'">GAME OVER!</h2>
+        <h3 v-else-if="winner === 'player'">YOU WON!</h3>
+        <h3 v-else>It's a Draw!</h3>
       </section>
 
       <section id="controls">
